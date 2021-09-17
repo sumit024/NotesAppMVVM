@@ -70,7 +70,6 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/edit_text_bg"
             android:gravity="start"
-            android:maxLines="1"
             android:padding="15dp"
             android:textColorHint="#D1D1D1"
             />
