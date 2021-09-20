@@ -14,4 +14,9 @@ class NotesRepository(private val dao:NotesDAO) {
 
     suspend fun updateNote(notes: Notes)= dao.updateNote(notes)
 
+    fun getHighNotes():LiveData<List<Notes>> = dao.getHighNotes()
+    fun getMediumNotes():LiveData<List<Notes>> = dao.getMediumNotes()
+    fun getLowNotes():LiveData<List<Notes>> = dao.getLowNotes()
+
+
 }

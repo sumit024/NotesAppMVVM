@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import com.app_devs.noteit.Constants
 import com.app_devs.noteit.R
 import com.app_devs.noteit.databinding.FragmentCreateNoteBinding
 import com.app_devs.noteit.model.Notes
@@ -59,9 +61,19 @@ class CreateNoteFragment : Fragment() {
         val notes=binding.etNote.text.toString()
         val d=Date()
         val notesDate:CharSequence= DateFormat.format("MMMM d, yyyy",d.time)
-        val notesObj:Notes=Notes(0,title,subtitle,notes,notesDate.toString(),priority)
-        viewModel.addNotes(notesObj)
-        Toast.makeText(requireContext(),"Notes created successfully",Toast.LENGTH_LONG).show()
-        Log.d("SUMIT",notesObj.toString())
+        if(Constants.verifyInput(title,subtitle,notes))
+        {
+            val notesObj:Notes=Notes(0,title,subtitle,notes,notesDate.toString(),priority)
+            viewModel.addNotes(notesObj)
+            Toast.makeText(requireContext(),"Notes created successfully",Toast.LENGTH_LONG).show()
+            Log.d("SUMIT",notesObj.toString())
+            Navigation.findNavController(requireView()).navigate(R.id.action_createNoteFragment_to_homeFragment)
+        }
+        else
+        {
+            Toast.makeText(requireContext(),"All fields must be filled",Toast.LENGTH_LONG).show()
+        }
+
     }
+
 }
