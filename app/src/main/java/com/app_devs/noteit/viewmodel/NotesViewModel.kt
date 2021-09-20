@@ -21,6 +21,7 @@ class NotesViewModel(application: Application): AndroidViewModel(application) {
     fun getAllNotes():LiveData<List<Notes>> =  repository.getAllNotes()
     fun deleteNote(id:Int)=viewModelScope.launch(Dispatchers.IO) { repository.deleteNote(id)}
     fun updateNote(notes: Notes)=viewModelScope.launch(Dispatchers.IO) { repository.updateNote(notes)}
+    fun deleteAllNotes()=viewModelScope.launch(Dispatchers.IO) { repository.deleteAllNotes()}
 
     fun getHighNotes():LiveData<List<Notes>> =  repository.getHighNotes()
     fun getMediumNotes():LiveData<List<Notes>> = repository.getMediumNotes()

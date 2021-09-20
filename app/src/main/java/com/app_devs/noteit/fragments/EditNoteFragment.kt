@@ -3,19 +3,21 @@ package com.app_devs.noteit.fragments
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.*
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.app_devs.noteit.Constants
 import com.app_devs.noteit.R
 import com.app_devs.noteit.databinding.FragmentEditNoteBinding
 import com.app_devs.noteit.model.Notes
 import com.app_devs.noteit.viewmodel.NotesViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
 
 class EditNoteFragment : Fragment() {
@@ -23,8 +25,7 @@ class EditNoteFragment : Fragment() {
     private lateinit var binding: FragmentEditNoteBinding
     private var priority:String="1"
     private val viewModel: NotesViewModel by viewModels()
-
-
+    private var isRecordDeleted=false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,6 +76,7 @@ class EditNoteFragment : Fragment() {
         binding.btnSaveEditedNote.setOnClickListener {
             updateNotes(it)
         }
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -96,5 +98,33 @@ class EditNoteFragment : Fragment() {
         {
             Toast.makeText(requireContext(),"All fields must be filled", Toast.LENGTH_LONG).show()
         }
+    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.delete) {
+            deleteRecord()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteRecord() {
+        val bottomSheetDialog= BottomSheetDialog(requireContext(),R.style.BottomSheetStyle)
+        bottomSheetDialog.setContentView(R.layout.dialog_delete)
+        val textViewYes=bottomSheetDialog.findViewById<TextView>(R.id.dialog_yes)
+        val textViewNo=bottomSheetDialog.findViewById<TextView>(R.id.dialog_no)
+        textViewYes?.setOnClickListener {
+            viewModel.deleteNote(old_notes.data.id)
+            Toast.makeText(requireContext(),"Note deleted successfully", Toast.LENGTH_SHORT).show()
+            bottomSheetDialog.dismiss()
+        }
+        textViewNo?.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
+
     }
 }
