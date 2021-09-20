@@ -1,18 +1,19 @@
-package com.app_devs.noteit
+package com.app_devs.noteit.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-
+import com.app_devs.noteit.model.Notes
+@Dao
 interface NotesDAO {
     @Query("SELECT * FROM notes_table")
     fun getNotes():LiveData<List<Notes>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(notes: Notes)
+    suspend fun insertNote(notes: Notes)
 
     @Query("DELETE FROM notes_table where id=:id")
-    fun deleteNode(id:Int)
+    suspend fun deleteNote(id:Int)
 
     @Update
-    fun updateNote(notes: Notes)
+    suspend fun updateNote(notes: Notes)
 }

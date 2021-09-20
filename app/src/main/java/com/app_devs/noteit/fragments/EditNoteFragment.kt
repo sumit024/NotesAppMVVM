@@ -1,10 +1,11 @@
-package com.app_devs.noteit
+package com.app_devs.noteit.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.app_devs.noteit.R
 
 class EditNoteFragment : Fragment() {
     override fun onCreateView(
