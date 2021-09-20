@@ -1,4 +1,4 @@
-package com.app_devs.noteit
+package com.app_devs.noteit.repository
 
 import androidx.lifecycle.LiveData
 import com.app_devs.noteit.dao.NotesDAO

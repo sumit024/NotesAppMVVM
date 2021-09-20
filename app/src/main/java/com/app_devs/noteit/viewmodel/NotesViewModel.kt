@@ -4,17 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.app_devs.noteit.NotesRepository
+import com.app_devs.noteit.repository.NotesRepository
 import com.app_devs.noteit.database.NotesDatabase
 import com.app_devs.noteit.model.Notes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NotesViewModel(application: Application): AndroidViewModel(application) {
-    val repository:NotesRepository
+    val repository: NotesRepository
     init{
         val dao=NotesDatabase.getDatabaseInstance(application).getDao()
-        repository=NotesRepository(dao)
+        repository= NotesRepository(dao)
     }
 
     fun addNotes(notes: Notes) = viewModelScope.launch(Dispatchers.IO) { repository.insertNote(notes) }
