@@ -1,5 +1,6 @@
 package com.app_devs.noteit.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -120,6 +121,7 @@ class EditNoteFragment : Fragment() {
             viewModel.deleteNote(old_notes.data.id)
             Toast.makeText(requireContext(),"Note deleted successfully", Toast.LENGTH_SHORT).show()
             bottomSheetDialog.dismiss()
+            findNavController().navigate(R.id.action_editNoteFragment_to_homeFragment)
         }
         textViewNo?.setOnClickListener {
             bottomSheetDialog.dismiss()
@@ -127,4 +129,5 @@ class EditNoteFragment : Fragment() {
         bottomSheetDialog.show()
 
     }
+
 }

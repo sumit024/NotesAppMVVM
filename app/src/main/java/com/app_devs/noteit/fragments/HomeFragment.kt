@@ -1,6 +1,8 @@
 package com.app_devs.noteit.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.SearchView
 import android.widget.TextView
@@ -23,6 +25,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: NotesViewModel by viewModels()
     private var oldListFiltering= arrayListOf<Notes>()
+    private var emptyList= arrayListOf<Notes>()
     private lateinit var adapter:NotesAdapter
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -30,22 +33,22 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-
         binding.fabAddNotes.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_createNoteFragment)
         }
-
-        val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
-        binding.rvNotes.layoutManager = staggeredGridLayoutManager
-
         viewModel.getAllNotes().observe(viewLifecycleOwner, Observer {
             oldListFiltering=it as ArrayList<Notes>
+            val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+            binding.rvNotes.layoutManager = staggeredGridLayoutManager
             adapter=NotesAdapter(requireContext(), it)
             binding.rvNotes.adapter = adapter
         })
         binding.filterHigh.setOnClickListener {
             viewModel.getHighNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
+                val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+                binding.rvNotes.layoutManager = staggeredGridLayoutManager
+
                 adapter=NotesAdapter(requireContext(), it)
                 binding.rvNotes.adapter = adapter
             })
@@ -53,6 +56,9 @@ class HomeFragment : Fragment() {
         binding.filterMedium.setOnClickListener {
             viewModel.getMediumNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
+                val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+                binding.rvNotes.layoutManager = staggeredGridLayoutManager
+
                 adapter=NotesAdapter(requireContext(), it)
                 binding.rvNotes.adapter = adapter
             })
@@ -60,6 +66,9 @@ class HomeFragment : Fragment() {
         binding.filterLow.setOnClickListener {
             viewModel.getLowNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
+                val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+                binding.rvNotes.layoutManager = staggeredGridLayoutManager
+
                 adapter=NotesAdapter(requireContext(), it)
                 binding.rvNotes.adapter = adapter
             })
@@ -67,6 +76,9 @@ class HomeFragment : Fragment() {
         binding.allNotesFilter.setOnClickListener {
             viewModel.getAllNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
+                val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
+                binding.rvNotes.layoutManager = staggeredGridLayoutManager
+
                 adapter=NotesAdapter(requireContext(), it)
                 binding.rvNotes.adapter = adapter
             })
@@ -75,7 +87,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
+        inflater.inflate(R.menu.search_menu, menu)
         val item=menu.findItem(R.id.search)
         val searchView= item.actionView as SearchView
         searchView.queryHint="Enter notes' title"
@@ -83,7 +95,6 @@ class HomeFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 notesFiltering(newText)
                 return true
@@ -91,6 +102,13 @@ class HomeFragment : Fragment() {
         })
         super.onCreateOptionsMenu(menu, inflater)
     }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if(item.itemId==R.id.delete){
+//            deleteAllRecords()
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
 
     private fun notesFiltering(newText: String?) {
         val newFilteringList= arrayListOf<Notes>()
@@ -101,12 +119,6 @@ class HomeFragment : Fragment() {
         adapter.filtering(newFilteringList)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.delete) {
-            deleteAllRecords()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun deleteAllRecords() {
         val bottomSheetDialog= BottomSheetDialog(requireContext(),R.style.BottomSheetStyle)
