@@ -26,7 +26,6 @@ class EditNoteFragment : Fragment() {
     private lateinit var binding: FragmentEditNoteBinding
     private var priority:String="1"
     private val viewModel: NotesViewModel by viewModels()
-    private var isRecordDeleted=false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

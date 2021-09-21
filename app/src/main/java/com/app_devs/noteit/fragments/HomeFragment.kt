@@ -25,7 +25,6 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: NotesViewModel by viewModels()
     private var oldListFiltering= arrayListOf<Notes>()
-    private var emptyList= arrayListOf<Notes>()
     private lateinit var adapter:NotesAdapter
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -33,9 +32,12 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        //creating a new note
         binding.fabAddNotes.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_createNoteFragment)
         }
+
+        //init recycler view
         viewModel.getAllNotes().observe(viewLifecycleOwner, Observer {
             oldListFiltering=it as ArrayList<Notes>
             val staggeredGridLayoutManager=StaggeredGridLayoutManager(2,LinearLayoutManager.VERTICAL)
@@ -43,6 +45,7 @@ class HomeFragment : Fragment() {
             adapter=NotesAdapter(requireContext(), it)
             binding.rvNotes.adapter = adapter
         })
+        // when high filter button is clicked
         binding.filterHigh.setOnClickListener {
             viewModel.getHighNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
@@ -53,6 +56,7 @@ class HomeFragment : Fragment() {
                 binding.rvNotes.adapter = adapter
             })
         }
+        //when medium filter is selected
         binding.filterMedium.setOnClickListener {
             viewModel.getMediumNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
@@ -63,6 +67,7 @@ class HomeFragment : Fragment() {
                 binding.rvNotes.adapter = adapter
             })
         }
+        //when low filter is selected
         binding.filterLow.setOnClickListener {
             viewModel.getLowNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
@@ -73,6 +78,7 @@ class HomeFragment : Fragment() {
                 binding.rvNotes.adapter = adapter
             })
         }
+        // all notes
         binding.allNotesFilter.setOnClickListener {
             viewModel.getAllNotes().observe(viewLifecycleOwner, Observer {
                 oldListFiltering=it as ArrayList<Notes>
@@ -83,6 +89,7 @@ class HomeFragment : Fragment() {
                 binding.rvNotes.adapter = adapter
             })
         }
+        //for searching
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -120,23 +127,23 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun deleteAllRecords() {
-        val bottomSheetDialog= BottomSheetDialog(requireContext(),R.style.BottomSheetStyle)
-        bottomSheetDialog.setContentView(R.layout.dialog_delete)
-        val textViewYes=bottomSheetDialog.findViewById<TextView>(R.id.dialog_yes)
-        val textViewNo=bottomSheetDialog.findViewById<TextView>(R.id.dialog_no)
-        val titleDialog=bottomSheetDialog.findViewById<TextView>(R.id.titleDialog)
-        titleDialog?.text="Are you sure you want to delete all records?"
-        textViewYes?.setOnClickListener {
-            viewModel.deleteAllNotes()
-            Toast.makeText(requireContext(),"All notes deleted successfully", Toast.LENGTH_LONG).show()
-            bottomSheetDialog.dismiss()
-        }
-        textViewNo?.setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
-        bottomSheetDialog.show()
-
-    }
+//    private fun deleteAllRecords() {
+//        val bottomSheetDialog= BottomSheetDialog(requireContext(),R.style.BottomSheetStyle)
+//        bottomSheetDialog.setContentView(R.layout.dialog_delete)
+//        val textViewYes=bottomSheetDialog.findViewById<TextView>(R.id.dialog_yes)
+//        val textViewNo=bottomSheetDialog.findViewById<TextView>(R.id.dialog_no)
+//        val titleDialog=bottomSheetDialog.findViewById<TextView>(R.id.titleDialog)
+//        titleDialog?.text="Are you sure you want to delete all records?"
+//        textViewYes?.setOnClickListener {
+//            viewModel.deleteAllNotes()
+//            Toast.makeText(requireContext(),"All notes deleted successfully", Toast.LENGTH_LONG).show()
+//            bottomSheetDialog.dismiss()
+//        }
+//        textViewNo?.setOnClickListener {
+//            bottomSheetDialog.dismiss()
+//        }
+//        bottomSheetDialog.show()
+//
+//    }
 
 }
